@@ -1774,7 +1774,11 @@ namespace GameLauncher {
 
         private void StartGame(string userId, string loginToken) {
             _nfswstarted = new Thread(() => {
-                LaunchGame(userId, loginToken, "http://127.0.0.1:" + Self.ProxyPort + "/nfsw/Engine.svc", this);
+                if (DetectLinux.LinuxDetected()) {
+                    LaunchGame(userId, loginToken, _serverIp, this);
+                } else {
+                    LaunchGame(userId, loginToken, "http://127.0.0.1:" + Self.ProxyPort + "/nfsw/Engine.svc", this);
+                }
             }) { IsBackground = true };
 
             _nfswstarted.Start();
